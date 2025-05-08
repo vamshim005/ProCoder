@@ -142,4 +142,7 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_HSTS_SECONDS = None
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_FRAME_DENY = False 
+SECURE_FRAME_DENY = False
+
+# New environment variables
+JUDGE0_API_KEY = config('JUDGE0_API_KEY', default='your-rapidapi-key') 
