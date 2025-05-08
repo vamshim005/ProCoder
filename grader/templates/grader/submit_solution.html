@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Solution - {{ question.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Submit Solution for {{ question.code }} - {{ question.title }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_language" class="form-label">Programming Language</label>
+            {{ form.language }}
+        </div>
+        <div class="mb-3">
+            <label for="id_code_text" class="form-label">Type or paste your code here</label>
+            {{ form.code_text }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if verdict %}
+    <div class="alert alert-info mt-4">
+        <h4>Result: {{ verdict }}</h4>
+        <pre>{{ details }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+<script>
+var editor = CodeMirror.fromTextArea(document.getElementById('id_code_text'), {
+    lineNumbers: true,
+    matchBrackets: true,
+    styleActiveLine: true,
+    theme: "default",
+    mode: "text/x-c++src"
+});
+
+document.getElementById('id_language').addEventListener('change', function() {
+    var lang = this.value;
+    var mode = "text/x-c++src";
+    if (lang === "python2" || lang === "python3") mode = "python";
+    if (lang === "java") mode = "text/x-java";
+    if (lang === "c") mode = "text/x-csrc";
+    if (lang === "cpp") mode = "text/x-c++src";
+    editor.setOption("mode", mode);
+});
+</script>
+{% endblock %} 

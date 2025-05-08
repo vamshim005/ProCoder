@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Problems - ProCoder{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Problems</h1>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for question in questions %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ question.code }} - {{ question.title }}</h5>
+                        <p class="card-text">Time Limit: {{ question.time_limit }} seconds</p>
+                        <a href="{% url 'questions:detail' question.code %}" class="btn btn-primary">Solve</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">No problems available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

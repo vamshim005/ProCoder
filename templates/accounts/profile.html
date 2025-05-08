@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.username }}'s Profile - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Profile</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-user-circle fa-6x mb-3"></i>
+                        <h5>{{ object.get_full_name }}</h5>
+                        <p class="text-muted">@{{ object.username }}</p>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table">
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ object.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Score:</th>
+                                <td>{{ object.score }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total Time:</th>
+                                <td>{{ object.total_time }} seconds</td>
+                            </tr>
+                            <tr>
+                                <th>Member Since:</th>
+                                <td>{{ object.timestamp|date:"F j, Y" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if request.user == object %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4 class="mb-0">Account Settings</h4>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'password_change' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-key me-2"></i> Change Password
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

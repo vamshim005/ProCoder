@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Login</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <hr>
+                <p class="mb-0">
+                    Don't have an account? <a href="{% url 'account:register' %}">Register here</a>
+                </p>
+                <p class="mb-0">
+                    Forgot your password? <a href="{% url 'password_reset' %}">Reset it here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

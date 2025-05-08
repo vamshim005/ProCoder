@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ question.code }} - {{ question.title }} - ProCoder{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">{{ question.code }} - {{ question.title }}</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Problem Description</h5>
+                <p class="card-text">
+                    {% if question.description %}
+                    {{ question.description|linebreaks }}
+                    {% else %}
+                    No description available.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Submit Solution</h5>
+                <form method="post" action="{% url 'grader:submit' question.code %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="language" class="form-label">Programming Language</label>
+                        <select class="form-control" id="language" name="language" required>
+                            <option value="c">C</option>
+                            <option value="cpp">C++</option>
+                            <option value="python2">Python 2</option>
+                            <option value="python3">Python 3</option>
+                            <option value="java">Java</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_code_text" class="form-label">Type or paste your code here</label>
+                        <textarea id="id_code_text" name="code_text" rows="15"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Test Cases</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Input</th>
+                                <th>Expected Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tc in test_cases_with_outputs %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><pre>{{ tc.input }}</pre></td>
+                                <td><pre>{{ tc.output }}</pre></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center">No test cases available.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+<script>
+var editor = CodeMirror.fromTextArea(document.getElementById('id_code_text'), {
+    lineNumbers: true,
+    matchBrackets: true,
+    styleActiveLine: true,
+    theme: "default",
+    mode: "text/x-c++src"
+});
+document.getElementById('language').addEventListener('change', function() {
+    var lang = this.value;
+    var mode = "text/x-c++src";
+    if (lang === "python2" || lang === "python3") mode = "python";
+    if (lang === "java") mode = "text/x-java";
+    if (lang === "c") mode = "text/x-csrc";
+    if (lang === "cpp") mode = "text/x-c++src";
+    editor.setOption("mode", mode);
+});
+</script>
+{% endblock %} 
