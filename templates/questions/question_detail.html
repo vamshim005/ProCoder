@@ -21,30 +21,6 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">Submit Solution</h5>
-                <form method="post" action="{% url 'grader:submit' question.code %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="language" class="form-label">Programming Language</label>
-                        <select class="form-control" id="language" name="language" required>
-                            <option value="c">C</option>
-                            <option value="cpp">C++</option>
-                            <option value="python2">Python 2</option>
-                            <option value="python3">Python 3</option>
-                            <option value="java">Java</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_code_text" class="form-label">Type or paste your code here</label>
-                        <textarea id="id_code_text" name="code_text" rows="15"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
                 <h5 class="card-title">Test Cases</h5>
                 <div class="table-responsive">
                     <table class="table">
@@ -70,6 +46,33 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Submit Solution</h5>
+                <div class="alert alert-warning">
+                    Note: Code execution is limited to 50 submissions per day (API limit). If you reach this limit, please try again tomorrow or contact the admin.
+                </div>
+                <form method="post" action="{% url 'grader:run_code' question.code %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="language" class="form-label">Programming Language</label>
+                        <select class="form-control" id="language" name="language" required>
+                            <option value="c" {% if language == "c" %}selected{% endif %}>C</option>
+                            <option value="cpp" {% if language == "cpp" %}selected{% endif %}>C++</option>
+                            <option value="python2" {% if language == "python2" %}selected{% endif %}>Python 2</option>
+                            <option value="python3" {% if language == "python3" %}selected{% endif %}>Python 3</option>
+                            <option value="java" {% if language == "java" %}selected{% endif %}>Java</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_code_text" class="form-label">Type or paste your code here</label>
+                        <textarea id="id_code_text" name="code_text" rows="15">{{ code_text }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Run</button>
+                </form>
             </div>
         </div>
     </div>

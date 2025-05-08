@@ -44,7 +44,9 @@ class LeaderBoardView(ListView):
             for qid in solved_questions:
                 first = accepted.filter(question_id=qid).order_by('submitted_at').first()
                 if first:
-                    total_time += int(first.submitted_at.timestamp())
+                    # Calculate time taken to solve this question (in seconds)
+                    time_taken = int((first.submitted_at - first.question.timestamp).total_seconds())
+                    total_time += time_taken
             print(f'DEBUG: User {user.username} score: {score}, total_time: {total_time}')
             leaderboard.append({
                 'user': user,

@@ -19,12 +19,34 @@
             <label for="id_code_text" class="form-label">Type or paste your code here</label>
             {{ form.code_text }}
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name="run" class="btn btn-primary">Run</button>
+        {% if can_submit %}
+            <button type="submit" name="submit" class="btn btn-success ms-2">Submit</button>
+        {% endif %}
     </form>
     {% if verdict %}
     <div class="alert alert-info mt-4">
         <h4>Result: {{ verdict }}</h4>
-        <pre>{{ details }}</pre>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Status</th>
+                    <th>Output</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tc in details %}
+                <tr>
+                    <td>{{ tc.index }}</td>
+                    <td>{{ tc.status }}</td>
+                    <td><pre>{{ tc.output }}</pre></td>
+                    <td><pre>{{ tc.error }}</pre></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {% endif %}
 </div>

@@ -14,5 +14,5 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('code', 'title', 'time_limit', 'timestamp')
     search_fields = ('code', 'title')
     list_filter = ('timestamp',)
-    fields = ('code', 'title', 'description', 'time_limit', 'sample_input', 'sample_output')
+    fields = ('code', 'title', 'description', 'time_limit')
     inlines = [TestCaseInline] 

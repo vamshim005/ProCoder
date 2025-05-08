@@ -20,8 +20,12 @@ def question_detail(request, code):
             'input': test_case.input_text,
             'output': test_case.output_text,
         })
+    code_text = request.GET.get('code_text', '')
+    language = request.GET.get('language', '')
     return render(request, 'questions/question_detail.html', {
         'question': question,
         'test_cases': test_cases,
         'test_cases_with_outputs': test_cases_with_outputs,
+        'code_text': code_text,
+        'language': language,
     }) 

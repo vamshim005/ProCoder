@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Results - {{ question.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Run Results for {{ question.code }} - {{ question.title }}</h2>
+    <div class="mb-3">
+        <label class="form-label">Programming Language</label>
+        <input type="text" class="form-control" value="{{ language }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Your Code</label>
+        <textarea class="form-control" rows="12" readonly>{{ code_text }}</textarea>
+    </div>
+    <div class="alert alert-info mt-4">
+        <h4>Result: {{ verdict }}</h4>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Status</th>
+                    <th>Output</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tc in details %}
+                <tr>
+                    <td>{{ tc.index }}</td>
+                    <td>{{ tc.status }}</td>
+                    <td><pre>{{ tc.output }}</pre></td>
+                    <td><pre>{{ tc.error }}</pre></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {% if can_submit %}
+            <div class="alert alert-success">All test cases passed! You can now submit your solution.</div>
+            <button type="submit" name="submit" class="btn btn-success">Submit</button>
+        {% else %}
+            <div class="alert alert-warning">Not all test cases passed. Please try again.</div>
+            <button type="submit" name="try_again" class="btn btn-primary">Try Again</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock %} 

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load time_filters %}
 
 {% block title %}Leaderboard - {{ block.super }}{% endblock %}
 
@@ -29,7 +30,7 @@
                             <small class="text-muted">@{{ user.username }}</small>
                         </td>
                         <td>{{ user.score }}</td>
-                        <td>{{ user.total_time }} seconds</td>
+                        <td>{{ user.total_time|hms }}</td>
                     </tr>
                     {% empty %}
                     <tr>
