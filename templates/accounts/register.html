@@ -10,6 +10,13 @@
                 <h4 class="mb-0">Register</h4>
             </div>
             <div class="card-body">
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}
@@ -34,4 +41,24 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pwd1 = document.querySelector('input[name="password1"]');
+    const pwd2 = document.querySelector('input[name="password2"]');
+    if (!pwd1 || !pwd2) return;
+    const form = pwd1.closest('form');
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'text-danger mb-2';
+    pwd2.parentNode.appendChild(errorDiv);
+
+    form.addEventListener('submit', function(e) {
+        if (pwd1.value !== pwd2.value) {
+            errorDiv.textContent = "Passwords do not match";
+            e.preventDefault();
+        } else {
+            errorDiv.textContent = "";
+        }
+    });
+});
+</script>
 {% endblock %} 

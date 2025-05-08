@@ -23,6 +23,8 @@ class Question(models.Model):
     title = models.CharField(unique=True, max_length=120)
     description = models.TextField(blank=True)
     time_limit = models.IntegerField(default=1)
+    sample_input = models.TextField(blank=True, help_text="Sample input for the problem")
+    sample_output = models.TextField(blank=True, help_text="Sample output for the problem")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     objects = QuestionManager()
@@ -56,63 +58,15 @@ class TestCaseManager(models.Manager):
 
 
 class TestCase(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=upload_test_case_file_location)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='test_cases')
+    input_text = models.TextField(help_text="Input for this test case")
+    output_text = models.TextField(help_text="Expected output for this test case")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     objects = TestCaseManager()
 
     class Meta:
-        ordering = ['file']
+        ordering = ['id']
 
     def __str__(self):
-        return self.question.code + ' - ' + self.file.name.split('/')[-1]
-
-    @property
-    def filename(self):
-        """ Returns the name of the file without the preceding path """
-        return self.file.name.split('/')[-1]
-
-
-def upload_expected_output_file_location(instance, filename):
-    location = 'test_cases/{code}/outputs/'.format(code=instance.question.code)
-    return location + filename
-
-
-class ExpectedOutputQuerySet(models.query.QuerySet):
-    def get_by_question(self, question_code):
-        return self.filter(question__code=question_code)
-
-    def get_by_question_test_case(self, question_code, test_case):
-        return self.get_by_question(question_code).filter(test_case=test_case)
-
-
-class ExpectedOutputManager(models.Manager):
-    def get_queryset(self):
-        return ExpectedOutputQuerySet(self.model, using=self._db)
-
-    def get_by_question(self, question_code):
-        return self.get_queryset().get_by_question(question_code)
-
-    def get_by_question_test_case(self, question_code, test_case):
-        return self.get_queryset().get_by_question_test_case(question_code, test_case)
-
-
-class ExpectedOutput(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    test_case = models.ForeignKey(TestCase, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=upload_expected_output_file_location)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    objects = ExpectedOutputManager()
-
-    class Meta:
-        ordering = ['file']
-
-    def __str__(self):
-        return self.question.code + ' - ' + self.file.name.split('/')[-1]
-
-    @property
-    def filename(self):
-        """ Returns the name of the file without the preceding path """
-        return self.file.name.split('/')[-1] 
+        return f"{self.question.code} - TestCase {self.id}" 

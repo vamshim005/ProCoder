@@ -4,7 +4,6 @@ from questions.models import Question
 from .forms import SubmissionForm
 from .models import Submission
 from .judge0_api import judge_with_judge0
-from questions.models import ExpectedOutput
 
 # Create your views here.
 
@@ -21,7 +20,7 @@ def submit_solution(request, code):
             submission.question = question
             submission.save()
             # Gather all test case inputs for the question
-            testcases = [tc.file.open('r').read() for tc in question.testcase_set.all()]
+            testcases = [tc.input_text for tc in question.test_cases.all()]
             # Call the Judge0 API
             results = judge_with_judge0(
                 source_code=submission.code_text,

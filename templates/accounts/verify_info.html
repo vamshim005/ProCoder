@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Your Email - ProCoder{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="alert alert-info mt-4">
+            <h5 class="mb-3">A verification link has been sent to your email.</h5>
+            <ul>
+                <li>Please check your spam folder if you don't see it in your inbox.</li>
+                <li>Gmail may warn that the message is dangerous. This is normal for new apps.</li>
+                <li>If you don't want to click the link, you can bypass verification by entering <b>2501</b> below.</li>
+            </ul>
+        </div>
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="bypass_code" class="form-label">Bypass Code</label>
+                <input type="text" class="form-control" id="bypass_code" name="bypass_code" placeholder="Enter 2501 to activate your account">
+            </div>
+            <button type="submit" class="btn btn-success">Bypass Verification</button>
+        </form>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

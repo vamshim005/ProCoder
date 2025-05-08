@@ -4,7 +4,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 
 
 class LoginRequiredMixin(BaseLoginRequiredMixin):
-    login_url = '/login/'
+    login_url = 'account:login'
     redirect_field_name = 'next'
 
 

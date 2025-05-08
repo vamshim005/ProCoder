@@ -6,7 +6,8 @@ from .views import (
     LoginView,
     RegisterView,
     ProfileView,
-    LeaderBoardView
+    LeaderBoardView,
+    verify_info
 )
 
 app_name = 'account'
@@ -16,6 +17,7 @@ urlpatterns = [
     path('email/resend-activation/', AccountEmailActivateView.as_view(), name='resend-activation'),
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('verify-info/', verify_info, name='verify_info'),
     path('profile/<str:username>/', ProfileView.as_view(), name='profile'),
     path('leaderboard/', LeaderBoardView.as_view(), name='leaderboard'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),

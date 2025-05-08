@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from .models import Question, TestCase, ExpectedOutput
+from .models import Question, TestCase
+
+
+class TestCaseInline(admin.TabularInline):
+    model = TestCase
+    extra = 1
+    fields = ('input_text', 'output_text')
 
 
 @admin.register(Question)
@@ -8,17 +14,5 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('code', 'title', 'time_limit', 'timestamp')
     search_fields = ('code', 'title')
     list_filter = ('timestamp',)
-
-
-@admin.register(TestCase)
-class TestCaseAdmin(admin.ModelAdmin):
-    list_display = ('question', 'filename', 'timestamp')
-    search_fields = ('question__code', 'question__title', 'file')
-    list_filter = ('timestamp',)
-
-
-@admin.register(ExpectedOutput)
-class ExpectedOutputAdmin(admin.ModelAdmin):
-    list_display = ('question', 'test_case', 'filename', 'timestamp')
-    search_fields = ('question__code', 'question__title', 'test_case__file', 'file')
-    list_filter = ('timestamp',) 
+    fields = ('code', 'title', 'description', 'time_limit', 'sample_input', 'sample_output')
+    inlines = [TestCaseInline] 

@@ -13,19 +13,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email settings for Gmail SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'vamshi.maya005@gmail.com'
-EMAIL_HOST_PASSWORD = 'your-app-password'
+EMAIL_HOST_PASSWORD = 'jhwuxjzhyffxxram'
 BASE_URL = '127.0.0.1:8000'
 
 DEFAULT_ACTIVATION_DAYS = 7
 
 # This allows sendgrid to send emails to the specified id whenever server error occurs.
-DEFAULT_FROM_EMAIL = 'Code Warrior <vamshi.maya005@gmail.com>'
+DEFAULT_FROM_EMAIL = 'Vamshi Maya <vamshi.maya005@gmail.com>'
 MANAGERS = (
     ('Code Warrior Admin', 'your-email@example.com'),
 )
@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 
 # Replace the built-in values
 AUTH_USER_MODEL = 'accounts.User'
-LOGIN_URL = '/login/'
+LOGIN_URL = 'account:login'
 LOGIN_URL_REDIRECT = '/'
 LOGOUT_URL = '/logout/'
 

@@ -186,7 +186,7 @@ class EmailActivation(models.Model):
                 }
                 txt_ = get_template('registration/emails/verify.txt').render(context)
                 html_ = get_template('registration/emails/verify.html').render(context)
-                subject = 'Code Warrior - Verify your Account'
+                subject = 'ProCoder - Verify your Account'
                 from_email = settings.DEFAULT_FROM_EMAIL
                 recipient_list = [self.email]
                 sent_mail = send_mail(
@@ -210,6 +210,7 @@ pre_save.connect(pre_save_email_activation_receiver, sender=EmailActivation)
 
 def post_save_user_create_receiver(sender, instance, created, *args, **kwargs):
     if created:
+        print(f"DEBUG: post_save signal fired for user {instance.username} ({instance.email})")
         obj = EmailActivation.objects.create(user=instance, email=instance.email)
         obj.send_activation()
 

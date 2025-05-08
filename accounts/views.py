@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
@@ -73,7 +73,7 @@ class AccountEmailActivateView(FormMixin, View):
                 obj = confirm_qs.first()
                 obj.activate()
                 messages.success(request, 'Your email has been confirmed! Please login to continue.')
-                return redirect('login')
+                return redirect('account:login')
             else:
                 activated_qs = qs.filter(activated=True)
                 if activated_qs.exists():
@@ -81,7 +81,7 @@ class AccountEmailActivateView(FormMixin, View):
                     msg = """Your email has already been confirmed.
                     Do you want to <a href="{link}">reset you password</a>?""".format(link=reset_link)
                     messages.success(request, mark_safe(msg))
-                    return redirect('login')
+                    return redirect('account:login')
         context = {'form': self.get_form(), 'key': key}
         return render(request, 'registration/activation_error.html', context)
 
@@ -119,17 +119,36 @@ class LoginView(AnonymousRequiredMixin, RequestFormAttachMixin, NextUrlMixin, Fo
         response = form.cleaned_data
         if not response.get('success'):
             messages.warning(request, mark_safe(response.get('message')))
-            return redirect('login')
+            return redirect('account:login')
         next_path = self.get_next_url()
         return redirect(next_path)
 
 
-class RegisterView(AnonymousRequiredMixin, CreateView):
-    form_class = RegisterForm
-    template_name = 'accounts/register.html'
-    success_url = '/login/'
+def verify_info(request):
+    if request.method == 'POST':
+        code = request.POST.get('bypass_code')
+        username = request.session.get('pending_user')
+        if code == '2501' and username:
+            user = get_object_or_404(User, username=username)
+            user.is_active = True
+            user.save()
+            messages.success(request, 'Your account has been activated! You can now log in.')
+            del request.session['pending_user']
+            return redirect('account:login')
+        else:
+            messages.error(request, 'Invalid code. Please check your email for the verification link or try again.')
+    return render(request, 'accounts/verify_info.html')
 
-    def form_valid(self, form):
-        super(RegisterView, self).form_valid(form)
-        messages.success(self.request, 'Verification link sent! Please check your email.')
-        return redirect(self.success_url) 
+
+class RegisterView(View):
+    def get(self, request):
+        form = RegisterForm()
+        return render(request, 'accounts/register.html', {'form': form})
+
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            request.session['pending_user'] = user.username
+            return redirect('account:verify_info')
+        return render(request, 'accounts/register.html', {'form': form}) 
