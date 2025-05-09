@@ -21,6 +21,7 @@ class Submission(models.Model):
     verdict = models.CharField(max_length=20, blank=True)  # e.g., Accepted, Wrong Answer, Time Limit Exceeded
     details = models.TextField(blank=True)  # Store error messages or test case results
     code_text = models.TextField(blank=True)
+    time_taken = models.IntegerField(default=0)  # Time taken in seconds
 
     def __str__(self):
         return f'{self.user} - {self.question.code} - {self.language} - {self.submitted_at}'

@@ -5,7 +5,8 @@ from .forms import SubmissionForm
 from .models import Submission
 from .judge0_api import judge_with_judge0
 from django.urls import reverse
-from urllib.parse import quote_plus
+from urllib.parse import quote
+import datetime
 
 # Create your views here.
 
@@ -90,13 +91,25 @@ def run_results(request, code):
     can_submit = verdict == 'Accepted'
     if request.method == 'POST':
         if 'submit' in request.POST and can_submit:
+            # Calculate time taken
+            start_times = request.session.get('question_start_times', {})
+            start_time_str = start_times.get(question.code)
+            time_taken = 0
+            if start_time_str:
+                start_time = datetime.datetime.fromisoformat(start_time_str)
+                end_time = datetime.datetime.now()
+                time_taken = int((end_time - start_time).total_seconds())
+                # Remove start time for this question
+                del start_times[question.code]
+                request.session['question_start_times'] = start_times
             submission = Submission(
                 user=request.user,
                 question=question,
                 code_text=code_text,
                 language=language,
                 verdict='Accepted',
-                details='All test cases passed.'
+                details='All test cases passed.',
+                time_taken=time_taken
             )
             submission.save()
             # Clean up session
@@ -106,7 +119,7 @@ def run_results(request, code):
             return redirect('account:leaderboard')
         elif 'try_again' in request.POST:
             # URL encode the code text to preserve special characters
-            encoded_code = quote_plus(code_text)
+            encoded_code = quote(code_text)
             url = reverse('questions:detail', kwargs={'code': question.code})
             return redirect(f"{url}?code_text={encoded_code}&language={language}")
     return render(request, 'grader/run_results.html', {

@@ -24,6 +24,17 @@ class ProfileView(LoginRequiredMixin, DetailView):
         instance = User.objects.filter(username=username).first()
         if instance is None:
             raise Http404('User not found')
+        # Calculate score and total_time
+        accepted = Submission.objects.filter(user=instance, verdict__icontains='Accepted')
+        solved_questions = accepted.values_list('question', flat=True).distinct()
+        score = solved_questions.count()
+        total_time = 0
+        for qid in solved_questions:
+            first = accepted.filter(question_id=qid).order_by('submitted_at').first()
+            if first:
+                total_time += first.time_taken
+        instance.score = score
+        instance.total_time = total_time
         return instance
 
 
@@ -44,9 +55,8 @@ class LeaderBoardView(ListView):
             for qid in solved_questions:
                 first = accepted.filter(question_id=qid).order_by('submitted_at').first()
                 if first:
-                    # Calculate time taken to solve this question (in seconds)
-                    time_taken = int((first.submitted_at - first.question.timestamp).total_seconds())
-                    total_time += time_taken
+                    # Use the time_taken field from the first accepted submission
+                    total_time += first.time_taken
             print(f'DEBUG: User {user.username} score: {score}, total_time: {total_time}')
             leaderboard.append({
                 'user': user,
