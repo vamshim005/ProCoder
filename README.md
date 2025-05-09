@@ -1,75 +1,105 @@
-# ProCoder
+# ProCoder - Online Judge Platform
 
-ProCoder is a modern online judge platform that allows users to solve programming problems in C, C++, Python, and Java. It features user authentication, a leaderboard, problem management, and secure code execution via the Judge0 API.
+ProCoder is a Django-based online judge platform that allows users to solve programming problems, submit solutions, and get real-time feedback on their code. The platform supports multiple programming languages and provides an interactive coding environment.
 
 ## Features
-- User registration, login, and email verification
-- Problem listing and detailed problem view
-- Code submission via an in-browser editor (CodeMirror)
-- Supports C, C++, Python 2, Python 3, and Java
-- Secure code execution using the Judge0 API (no local Docker required)
-- Leaderboard with scoring based on accepted solutions
-- Django admin for problem and test case management
-- Responsive UI with Bootstrap
+
+- **Multiple Language Support**: Write solutions in C, C++, Python 2, and Python 3
+- **Real-time Code Execution**: Get instant feedback on your code submissions
+- **Test Case Validation**: Solutions are tested against multiple test cases
+- **User Authentication**: Secure login and registration system
+- **Leaderboard**: Track your progress and compare with other users
+- **Interactive Code Editor**: Built-in code editor with syntax highlighting
+- **Email Verification**: Secure account creation with email verification
 
 ## Tech Stack
-- Python, Django
-- Judge0 API (via RapidAPI)
-- Bootstrap 5, CodeMirror
-- PostgreSQL or SQLite (development)
 
-## Setup Instructions
+- **Backend**: Django
+- **Frontend**: HTML, CSS, Bootstrap
+- **Code Editor**: CodeMirror
+- **Judging System**: Judge0 API
+- **Email Service**: Gmail SMTP
+- **Deployment**: PythonAnywhere
+- **Environment Variables**: python-decouple
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/<your-username>/ProCoder.git
-   cd ProCoder
-   ```
+## Installation
 
-2. **Create and activate a virtual environment:**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/ProCoder.git
+cd ProCoder
+```
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. Create and activate a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-4. **Set environment variables:**
-   - `SECRET_KEY`: Your Django secret key
-   - `JUDGE0_API_KEY`: Your Judge0 RapidAPI key
-   - (Optionally use a `.env` file with `python-decouple`)
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-5. **Run migrations and collect static files:**
-   ```bash
-   python manage.py migrate
-   python manage.py collectstatic
-   ```
+4. Create a `.env` file in the project root and add the following variables:
+```
+DEBUG=True
+SECRET_KEY=your_secret_key
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=your_email@gmail.com
+EMAIL_HOST_PASSWORD=your_app_password
+JUDGE0_API_URL=your_judge0_api_url
+```
 
-6. **Create a superuser:**
-   ```bash
-   python manage.py createsuperuser
-   ```
+5. Run migrations:
+```bash
+python manage.py migrate
+```
 
-7. **Run the development server:**
-   ```bash
-   python manage.py runserver
-   ```
+6. Create a superuser:
+```bash
+python manage.py createsuperuser
+```
 
-8. **Access the app:**
-   - Go to `http://127.0.0.1:8000/` in your browser
-   - Log in, register, and start solving problems!
+7. Run the development server:
+```bash
+python manage.py runserver
+```
 
-## Deployment
-- ProCoder can be deployed to PythonAnywhere, Heroku, or any VPS/cloud server.
-- For Judge0 API integration, no Docker is required on your server.
-- See the deployment section in this README or ask for a step-by-step guide.
+## Usage
+
+1. Register a new account or login with existing credentials
+2. Browse available programming problems
+3. Select a problem and write your solution in the code editor
+4. Choose your programming language
+5. Submit your solution and get instant feedback
+6. View test case results and debug your code if needed
+7. Check the leaderboard to see your ranking
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/your-feature-name`
+3. Make your changes
+4. Commit your changes: `git commit -m 'Add some feature'`
+5. Push to the branch: `git push origin feature/your-feature-name`
+6. Submit a pull request
 
 ## License
-MIT License
 
----
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-**ProCoder** — The modern, secure, and extensible online judge platform. 
+## Acknowledgments
+
+- [Judge0](https://judge0.com/) for the code execution API
+- [CodeMirror](https://codemirror.net/) for the code editor
+- [Bootstrap](https://getbootstrap.com/) for the UI components
+
+## Contact
+
+For any questions or suggestions, please open an issue in the GitHub repository or contact the maintainers.
+
+## Live Demo
+
+Visit the live demo at: [ProCoder Demo](https://your-demo-url.com) 

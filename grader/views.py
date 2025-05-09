@@ -4,6 +4,8 @@ from questions.models import Question
 from .forms import SubmissionForm
 from .models import Submission
 from .judge0_api import judge_with_judge0
+from django.urls import reverse
+from urllib.parse import quote_plus
 
 # Create your views here.
 
@@ -103,8 +105,10 @@ def run_results(request, code):
                     del request.session[key]
             return redirect('account:leaderboard')
         elif 'try_again' in request.POST:
-            # Redirect back to question page with code/language pre-filled
-            return redirect(f"/questions/{question.code}/?code_text={code_text}&language={language}")
+            # URL encode the code text to preserve special characters
+            encoded_code = quote_plus(code_text)
+            url = reverse('questions:detail', kwargs={'code': question.code})
+            return redirect(f"{url}?code_text={encoded_code}&language={language}")
     return render(request, 'grader/run_results.html', {
         'question': question,
         'code_text': code_text,
