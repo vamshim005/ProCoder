@@ -25,21 +25,21 @@ ProCoder is a Django-based online judge platform that allows users to solve prog
 ## Installation
 
 1. Clone the repository:
-```bash
+   ```bash
 git clone https://github.com/yourusername/ProCoder.git
-cd ProCoder
-```
+   cd ProCoder
+   ```
 
 2. Create and activate a virtual environment:
-```bash
+   ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+   ```
 
 3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 4. Create a `.env` file in the project root and add the following variables:
 ```
@@ -53,19 +53,19 @@ JUDGE0_API_URL=your_judge0_api_url
 ```
 
 5. Run migrations:
-```bash
-python manage.py migrate
-```
+   ```bash
+   python manage.py migrate
+   ```
 
 6. Create a superuser:
-```bash
-python manage.py createsuperuser
-```
+   ```bash
+   python manage.py createsuperuser
+   ```
 
 7. Run the development server:
-```bash
-python manage.py runserver
-```
+   ```bash
+   python manage.py runserver
+   ```
 
 ## Usage
 
